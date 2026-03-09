@@ -1,0 +1,63 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ecommerce
+    ports:
+      - "3306:3306"
+    networks:
+      - ecom-network
+
+  backend:
+    build: ./02-backend_spring-boot-rest-api
+    container_name: backend-springboot
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/ecommerce?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    networks:
+      - ecom-network
+
+  frontend:
+    build: ./03-frontend_angular-ecommerce
+    container_name: frontend-angular
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - ecom-network
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - backend
+    networks:
+      - ecom-network
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - ecom-network
+
+networks:
+  ecom-network:
+    driver: bridge
+volumes:
+  grafana-data:
