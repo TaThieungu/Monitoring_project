@@ -5,10 +5,10 @@ WORKDIR /app
 COPY . .
 
 RUN npm install --force
-RUN npm run build 
+RUN npm run build
 
 ## run stage ##
-FROM eclipse-temurin:17-jdk-alpine
+FROM nginx:alpine
 
 COPY --from=build /app/dist/angular-ecommerce /usr/share/nginx/html
 

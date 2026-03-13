@@ -1,0 +1,17 @@
+groups:
+  - name: example_alerts
+    rules:
+      - alert: HighCPUUsage
+        expr: avg(rate(cpu_usage_seconds_total[5m])) by (instance) > 0.8
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "CPU usage is high for instance {{ $labels.instance }}"
+      - alert: HighMemoryUsage
+        expr: avg(rate(memory_usage_bytes[5m])) by (instance) > 0.8
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Memory usage is high for instance {{ $labels.instance }}"

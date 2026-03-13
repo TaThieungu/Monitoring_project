@@ -1,7 +1,17 @@
 global:
   scrape_interval: 5s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - "alertmanager:9093" # Địa chỉ Alertmanager
+
 scrape_configs:
   - job_name: "spring-backend"
     metrics_path: "/actuator/prometheus"
     static_configs:
       - targets: ["backend:8080"]
+
+rule_files:
+  - "alert_rules.yml" # Tham chiếu đến tệp cảnh báo (quy tắc cảnh báo)
