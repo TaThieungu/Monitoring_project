@@ -15,3 +15,10 @@ groups:
           severity: critical
         annotations:
           summary: "Memory usage is high for instance {{ $labels.instance }}"
+      - alert: TestAlert
+        expr: vector(1)
+        for: 10s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Test alert"

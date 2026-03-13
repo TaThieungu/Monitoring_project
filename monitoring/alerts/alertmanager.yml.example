@@ -12,5 +12,5 @@ receivers:
   - name: "slack"
     slack_configs:
       - channel: "#monitoring_project_slack"
-        api_url: "https://hooks.slack.com/services/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"
+        api_url: "WEB_HOOK_SLACK_URL_HERE"
         send_resolved: true # Gửi thông báo khi cảnh báo được giải quyết

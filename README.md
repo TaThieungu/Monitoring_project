@@ -1,10 +1,17 @@
-# Monitoring System with Prometheus & Grafana
+# Monitoring System with Prometheus, Grafana & Alertmanager
 
 ## 📌 Project Overview
 
-This project demonstrates how to monitor a Spring Boot application using **Prometheus** and **Grafana**.
+This project demonstrates how to monitor a Spring Boot application using a complete monitoring stack.
 
-The system collects application metrics and visualizes them through a monitoring dashboard.
+The system collects application metrics, visualizes them in dashboards, and automatically sends alerts when abnormal conditions are detected.
+
+Monitoring tools used in this project:
+
+* Prometheus for metrics collection
+* Grafana for visualization
+* Alertmanager for alert management
+* Slack for alert notifications
 
 ---
 
@@ -13,42 +20,100 @@ The system collects application metrics and visualizes them through a monitoring
 * Spring Boot
 * Prometheus
 * Grafana
-* Docker
+* Alertmanager
+* Docker & Docker Compose
 * Micrometer
+* Slack Webhook
 
 ---
 
 ## 🏗 Architecture
 
+Monitoring flow:
+
 Spring Boot Application
 ⬇
 Prometheus (collect metrics)
 ⬇
-Grafana (visualize metrics)
+Grafana (visualize dashboards)
+⬇
+Alertmanager
+⬇
+Slack Notification
+
+Prometheus scrapes metrics from the Spring Boot application using the endpoint:
+
+/actuator/prometheus
 
 ---
 
-## 📊 Dashboard
+## 📊 Dashboards
 
-Example monitoring dashboard:
+The monitoring dashboards are created in Grafana.
 
-![Grafana Dashboard](docs/grafana-dashboard.png)
+Two main dashboard groups are included in this project.
 
-The dashboard includes:
+### System Monitoring
+
+System level metrics:
+
+* CPU Usage
+* JVM Memory Usage
+* Thread Usage
+
+### Application Monitoring
+
+Application level metrics:
 
 * HTTP Requests Per Second
-* CPU Usage
+* Request Latency
 * Application Uptime
+
+Example dashboard:
+
+![Grafana Dashboard](monitoring/grafana/dashboard/system-app-dashboard.json)
+
+Example panels:
+
+![HTTP Requests](monitoring/grafana/panel/HTTP_Request_per_second.png)
+
+![CPU Usage](monitoring/grafana/panel/CPU_usage.png)
+
+![Application Uptime](monitoring/grafana/panel/App_uptime.png)
+
+![Test Notification](monitoring/alerts/Test_notification.png)
+
+---
+
+## 🚨 Alerting System
+
+Alerts are configured using Prometheus Alert Rules and managed by Alertmanager.
+
+Example alert conditions:
+
+* High CPU usage
+* High request rate
+* Application downtime
+
+Alert flow:
+
+Prometheus Alert Rule
+⬇
+Alertmanager
+⬇
+Slack Webhook
+⬇
+Slack Channel Notification
 
 ---
 
 ## ⚙️ Setup & Run
 
-### 1. Clone repository
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/tathieungu/monitoring-project.git
-cd monitoring-project
+git clone https://github.com/TaThieungu/Monitoring_project.git
+cd Monitoring_project
 ```
 
 ### 2. Start services
@@ -61,46 +126,52 @@ docker compose up -d
 
 Prometheus
 
-```
 http://localhost:9090
-```
 
 Grafana
 
-```
 http://localhost:3000
-```
 
-Default login:
+Default Grafana login:
 
-```
 username: admin
 password: admin123
-```
+
+Alertmanager
+
+http://localhost:9093
 
 ---
 
 ## 📁 Project Structure
 
 ```
-monitoring-project
+Monitoring_project
 |
 ├── 01-starter-files_db-scripts
 ├── 02-backend_spring-boot-rest-api
 ├── 03-frontend_angular-ecommerce
+|
 ├── monitoring
 │   ├── prometheus
-│   │   └── prometheus.yml
+│   │   ├── prometheus.yml
+│   │   └── alert_rules.yml
+│   │
+│   ├── alerts
+│   │   |── alertmanager.yml
+│   │   |── alert_rules.yml
+│   │   |── alertmanager.yml.example
+│   │   └── Test_notification.png
 │   │
 │   └── grafana
 │       ├── dashboards
-|       |     └── system-app-dashboard.json
-│       └──panel
-|              |── App_uptime.png
-|              |── CPU_usage.png
-|              └── HTTP_Request_per_second.png
-│
-│
+│       │   └── system-app-dashboard.json
+│       │
+│       └── panel
+│           ├── App_uptime.png
+│           ├── CPU_usage.png
+│           └── HTTP_Request_per_second.png
+|
 ├── docker-compose.yml
 └── README.md
 ```
@@ -109,21 +180,34 @@ monitoring-project
 
 ## 📈 Metrics Collected
 
+Application Metrics
+
 * HTTP request rate
-* JVM memory usage
-* CPU usage
+* HTTP request latency
 * Application uptime
+
+System Metrics
+
+* CPU usage
+* JVM memory usage
+* Thread usage
 
 ---
 
 ## 🚀 Future Improvements
 
-* Add Alertmanager
+Possible improvements for this monitoring system:
+
 * Add Loki for log monitoring
-* Add Kubernetes monitoring
+* Add Promtail for log shipping
+* Add Node Exporter for host monitoring
+* Deploy the monitoring stack on Kubernetes
+* Add more Grafana dashboards
 
 ---
 
 ## 👨‍💻 Author
 
 TaThieuNgu
+
+DevOps Monitoring Practice Project
