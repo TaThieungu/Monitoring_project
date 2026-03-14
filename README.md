@@ -29,17 +29,23 @@ Monitoring tools used in this project:
 
 ## 🏗 Architecture
 
-Monitoring flow:
-
-Spring Boot Application
-⬇
-Prometheus (collect metrics)
-⬇
-Grafana (visualize dashboards)
-⬇
-Alertmanager
-⬇
-Slack Notification
+User
+  │
+  ▼
+Spring Boot App
+  │
+  ▼
+Micrometer Metrics
+  │
+  ▼
+Prometheus
+  │
+  ├── Grafana (Dashboards)
+  │
+  └── Alertmanager
+           │
+           ▼
+         Slack
 
 Prometheus scrapes metrics from the Spring Boot application using the endpoint:
 
